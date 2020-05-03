@@ -33,10 +33,12 @@ int main()
 	cout << endl;
 
 	pair<bool, StateLinkDict> find_result = FindPath(puzzle, target.getID());
-	if (find_result.first){
+	if (find_result.first)
+	{
 		cout << "Find it!" << endl;
 		Puzzle::PuzzleState child = target_state;
-		while (!matchState(child, init)){
+		while (!matchState(child, init))
+		{
 			Puzzle::PuzzleState parent = IDtoPuzzleState(
 				find_result.second[PuzzleStatetoID(child)]);
 			child = parent;
@@ -49,21 +51,26 @@ int main()
 		cout << "Cannot achieve the target state." << endl;
 }
 
+
 bool checkInputState(array<unsigned int, Puzzle::num_cols * Puzzle::num_rows> inputState)
 {
 	set<unsigned int> check(inputState.begin(), inputState.end());
 	bool flag = false;
 
-	if (check.size() != 9){
+	if (check.size() != 9)
+	{
 		cout << "There exists repreated element in the input state!" << endl;
 		flag = true;
 	}
-	if (check.find(0) == check.end()){
+	if (check.find(0) == check.end())
+	{
 		cout << "There should have an empty palce on puzzle descibed as 0!" << endl;
 		flag = true;
 	}
-	for (auto const & element : check){
-		if (element >= 9){
+	for (auto const & element : check) 
+	{
+		if (element >= 9)
+		{
 			flag = true;
 			cout << "There is an element above 9!" << endl;
 			break;
@@ -73,7 +80,9 @@ bool checkInputState(array<unsigned int, Puzzle::num_cols * Puzzle::num_rows> in
 	return flag;
 }
 
-Puzzle::PuzzleState InputState(){	
+
+Puzzle::PuzzleState InputState()
+{	
 	array<unsigned int, Puzzle::num_cols * Puzzle::num_cols> inputSequence {};
 	cout <<  "Enter the state from top-left to buttom-right: ";
 	for (size_t i = 0; i < inputSequence.size(); ++i)
@@ -86,7 +95,8 @@ Puzzle::PuzzleState InputState(){
 
 	bool flag = checkInputState(inputSequence);
 
-	while (flag){	
+	while (flag)
+	{	
 		cout << "\nEnter the state from top-left to buttom-right: ";
 		for (size_t i = 0; i < inputSequence.size(); ++i)
 			cin >> inputSequence[i];
@@ -102,7 +112,8 @@ Puzzle::PuzzleState InputState(){
 	size_t i = 0;
 	for (auto & row : inputState)
 	{
-		for (auto & column : row){
+		for (auto & column : row)
+		{
 			column = inputSequence[i];
 			++i;
 		}
@@ -111,17 +122,21 @@ Puzzle::PuzzleState InputState(){
 	return inputState;
 }
 
-set<Puzzle::PuzzleState> FindAllStates(Puzzle puzzle){
+set<Puzzle::PuzzleState> FindAllStates(Puzzle puzzle)
+{
 	set<decltype(puzzle.getState())> S {puzzle.getState()};
 	queue<decltype(puzzle.getState())> Q;
 	Q.push(puzzle.getState());
 	array<char, 4> direction {'u', 'd', 'l', 'r'};
 	int x = 0;
-	while (!Q.empty()){
+	while (!Q.empty())
+	{
 		puzzle.setState(Q.front()); Q.pop();
-		for (char & action : direction){
+		for (char & action : direction)
+		{
 			auto move_state = puzzle.move(action);
-			if (S.find(move_state) == S.end()){
+			if (S.find(move_state) == S.end())
+			{
 				Q.push(move_state);
 				S.insert(move_state);
 			}
@@ -131,7 +146,9 @@ set<Puzzle::PuzzleState> FindAllStates(Puzzle puzzle){
 	return S;
 }
 
-bool matchState(Puzzle::PuzzleState state1, Puzzle::PuzzleState state2){
+
+bool matchState(Puzzle::PuzzleState state1, Puzzle::PuzzleState state2)
+{
 	for (size_t i = 0; i < state1.size(); ++i)
 		for (size_t j = 0; j < state1[0].size(); ++j)
 			if (state1[i][j] != state2[i][j])
@@ -139,23 +156,28 @@ bool matchState(Puzzle::PuzzleState state1, Puzzle::PuzzleState state2){
 	return true;
 }
 
-bool FindState(Puzzle puzzle, Puzzle::PuzzleState target){
+bool FindState(Puzzle puzzle, Puzzle::PuzzleState target)
+{
 	set<decltype(puzzle.getState())> S {puzzle.getState()};
 	queue<decltype(puzzle.getState())> Q;
 	Q.push(puzzle.getState());
 
 	array<char, 4> direction {'u', 'd', 'l', 'r'};
-	while (!Q.empty()){
+	while (!Q.empty())
+	{
 		puzzle.setState(Q.front()); Q.pop();
 		Puzzle::PuzzleState parentState = puzzle.getState();
-		if (matchState(puzzle.getState(), target)){
+		if (matchState(puzzle.getState(), target))
+		{
 			cout << "The current puzzle state is:" << endl;
 			puzzle.printState();
 			return true;
 		}
-		for (char & action : direction){
+		for (char & action : direction)
+		{
 			Puzzle::PuzzleState move_state = puzzle.move(action);
-			if (S.find(move_state) == S.end()){
+			if (S.find(move_state) == S.end())
+			{
 				Q.push(move_state);
 				S.insert(move_state);
 			}
@@ -165,19 +187,23 @@ bool FindState(Puzzle puzzle, Puzzle::PuzzleState target){
 	return false;
 }
 
-pair<bool, StateLinkDict> FindPath(Puzzle puzzle, string target){
+pair<bool, StateLinkDict> FindPath(Puzzle puzzle, string target)
+{
 	set<decltype(puzzle.getState())> S {puzzle.getState()};
 	queue<decltype(puzzle.getState())> Q;
 	Q.push(puzzle.getState());
 	StateLinkDict D; 
 
 	array<char, 4> direction {'u', 'd', 'l', 'r'};
-	while (!Q.empty()){
+	while (!Q.empty())
+	{
 		puzzle.setState(Q.front()); Q.pop();
 		string parentState = puzzle.getID();
-		for (char & action : direction){
+		for (char & action : direction)
+		{
 			Puzzle::PuzzleState move_state = puzzle.move(action);
-			if (S.find(move_state) == S.end()){
+			if (S.find(move_state) == S.end())
+			{
 				Q.push(move_state);
 				S.insert(move_state);
 				// puzzle.setState(move_state);
@@ -191,7 +217,8 @@ pair<bool, StateLinkDict> FindPath(Puzzle puzzle, string target){
 	return {false, D};
 }
 
-Puzzle::PuzzleState IDtoPuzzleState(string ID){
+Puzzle::PuzzleState IDtoPuzzleState(string ID)
+{
 	Puzzle::PuzzleState state {};
 	for(size_t i = 0; i < ID.size(); ++i)
 		state[i/3][i%3] = (unsigned int)ID[i] - (unsigned int)'0';
@@ -199,7 +226,8 @@ Puzzle::PuzzleState IDtoPuzzleState(string ID){
 	return state;    	
 }
 
-string PuzzleStatetoID(Puzzle::PuzzleState state){
+string PuzzleStatetoID(Puzzle::PuzzleState state)
+{
 	string ID {};
 	for (auto & row : state)
 		for (auto & column : row)
