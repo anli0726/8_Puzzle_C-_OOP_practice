@@ -3,9 +3,7 @@
 #include "Puzzle.h"
 using namespace std;
 
-Puzzle::Puzzle(PuzzleState inputState) {
-	setState(inputState);
-}
+Puzzle::Puzzle(PuzzleState inputState) {setState(inputState);}
 
 
 void Puzzle::setState(PuzzleState inputState)
