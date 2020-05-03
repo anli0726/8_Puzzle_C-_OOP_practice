@@ -62,11 +62,13 @@ bool checkInputState(array<unsigned int, Puzzle::num_cols * Puzzle::num_rows> in
 		cout << "There exists repreated element in the input state!" << endl;
 		flag = true;
 	}
+	
 	if (check.find(0) == check.end())
 	{
 		cout << "There should have an empty palce on puzzle descibed as 0!" << endl;
 		flag = true;
 	}
+	
 	for (auto const & element : check) 
 	{
 		if (element >= 9)
